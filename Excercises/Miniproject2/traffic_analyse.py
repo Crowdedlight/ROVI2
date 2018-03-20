@@ -24,11 +24,11 @@ currFrame = None
 # annotated = cv2.imread("motorvej52_annotated_red.png", cv2.IMREAD_COLOR)
 # annotatedMask = GetMaskFromAnnotated(annotated)
 
-fgbg = cv2.createBackgroundSubtractorMOG2(detectShadows=False)
+fgbg = cv2.createBackgroundSubtractorMOG2(detectShadows=False, history=50, varThreshold=30)
 
 cv2.namedWindow("frame", cv2.WINDOW_NORMAL)
 cv2.namedWindow("unprocessed_frame", cv2.WINDOW_NORMAL)
-cv2.namedWindow("Optical_Flow", cv2.WINDOW_NORMAL)
+# cv2.namedWindow("Optical_Flow", cv2.WINDOW_NORMAL)
 
 def nothing(x):
     pass
@@ -46,23 +46,23 @@ cv2.setTrackbarPos('closing', 'frame', 2)
 ### init Fast for image stabilization ###
 # Initiate FAST object with default values
 # fast = cv2.FastFeatureDetector_create(nonmaxSuppression=False)
-orb = cv2.ORB_create()
-MIN_MATCH_COUNT = 10
-
-# FLANN parameters
-FLANN_INDEX_LSH = 6
-index_params= dict(algorithm = FLANN_INDEX_LSH,
-                   table_number = 6, # 12
-                   key_size = 12,     # 20
-                   multi_probe_level = 1) #2
-search_params = dict(checks=100)   # or pass empty dictionary
+# orb = cv2.ORB_create()
+# MIN_MATCH_COUNT = 10
+#
+# # FLANN parameters
+# FLANN_INDEX_LSH = 6
+# index_params= dict(algorithm = FLANN_INDEX_LSH,
+#                    table_number = 6, # 12
+#                    key_size = 12,     # 20
+#                    multi_probe_level = 1) #2
+# search_params = dict(checks=100)   # or pass empty dictionary
 
 # For FAST
 # FLANN_INDEX_KDTREE = 0
 # index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
 # search_params = dict(checks=50)
 
-flann = cv2.FlannBasedMatcher(index_params, search_params)
+# flann = cv2.FlannBasedMatcher(index_params, search_params)
 
 # Init optical flow
 # params for ShiTomasi corner detection
@@ -78,16 +78,16 @@ flann = cv2.FlannBasedMatcher(index_params, search_params)
 # color = np.random.randint(0, 255, (100, 3))
 
 # initlize
-ret, firstFrame = cap.read()
-firstFrame = cv2.cvtColor(firstFrame, cv2.COLOR_BGR2GRAY)
-refKP, refDes = orb.detectAndCompute(firstFrame, None)
+# ret, firstFrame = cap.read()
+# firstFrame = cv2.cvtColor(firstFrame, cv2.COLOR_BGR2GRAY)
+# refKP, refDes = orb.detectAndCompute(firstFrame, None)
 # refKP, refDes = fast.detectAndCompute(firstFrame, None)
 
 while cap.isOpened():
     ret, currFrame = cap.read()
 
     outFrame = currFrame
-    flowFrame = currFrame
+    # flowFrame = currFrame
     # currFrame = cv2.cvtColor(currFrame, cv2.COLOR_BGR2GRAY)
 
     # trackbars
@@ -100,39 +100,39 @@ while cap.isOpened():
 
     # Stabilize image
     greyFrame = cv2.cvtColor(currFrame, cv2.COLOR_BGR2GRAY)
-    currKP, currDes = orb.detectAndCompute(greyFrame, None)
-    # currKP, currDes = fast.detectAndCompute(greyFrame, None)
-
-    #Match
-    matches = flann.knnMatch(refDes, currDes, k=2)
-    # Apply ratio test
-    good = []
-    for m_n in matches:
-        if len(m_n) != 2:
-            continue
-        (m, n) = m_n
-        if m.distance < 0.75 * n.distance:
-            good.append(m)
-
-    # perspective change
-    if len(good) > MIN_MATCH_COUNT:
-
-        src_pts = np.float32([refKP[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
-        dst_pts = np.float32([currKP[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
-
-        M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
-        matchesMask = mask.ravel().tolist()
-
-        h, w, depth = currFrame.shape
-        currFrame = cv2.warpPerspective(currFrame, M, (w, h))
-
-        #TODO debug drawing FAST features
-        pts = np.float32([[0,0],[0,h-1],[w-1,h-1],[w-1,0] ]).reshape(-1,1,2)
-        dst = cv2.perspectiveTransform(pts, M)
-        flowFrame = cv2.polylines(currFrame, [np.int32(dst)], True, 255, 3, cv2.LINE_AA)
-    else:
-        print("Not enough matches are found - %d/%d" % (len(good), MIN_MATCH_COUNT))
-        matchesMask = None
+    # currKP, currDes = orb.detectAndCompute(greyFrame, None)
+    # # currKP, currDes = fast.detectAndCompute(greyFrame, None)
+    #
+    # #Match
+    # matches = flann.knnMatch(refDes, currDes, k=2)
+    # # Apply ratio test
+    # good = []
+    # for m_n in matches:
+    #     if len(m_n) != 2:
+    #         continue
+    #     (m, n) = m_n
+    #     if m.distance < 0.75 * n.distance:
+    #         good.append(m)
+    #
+    # # perspective change
+    # if len(good) > MIN_MATCH_COUNT:
+    #
+    #     src_pts = np.float32([refKP[m.queryIdx].pt for m in good]).reshape(-1, 1, 2)
+    #     dst_pts = np.float32([currKP[m.trainIdx].pt for m in good]).reshape(-1, 1, 2)
+    #
+    #     M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
+    #     matchesMask = mask.ravel().tolist()
+    #
+    #     h, w, depth = currFrame.shape
+    #     currFrame = cv2.warpPerspective(currFrame, M, (w, h))
+    #
+    #     #TODO debug drawing FAST features
+    #     pts = np.float32([[0,0],[0,h-1],[w-1,h-1],[w-1,0] ]).reshape(-1,1,2)
+    #     dst = cv2.perspectiveTransform(pts, M)
+    #     flowFrame = cv2.polylines(currFrame, [np.int32(dst)], True, 255, 3, cv2.LINE_AA)
+    # else:
+    #     print("Not enough matches are found - %d/%d" % (len(good), MIN_MATCH_COUNT))
+    #     matchesMask = None
 
     # kp = np.array([idx.pt for idx in kp])
     # print(len(kp))
@@ -206,7 +206,7 @@ while cap.isOpened():
 
     cv2.imshow('frame', morphImg)
     cv2.imshow('unprocessed_frame', outFrame)
-    cv2.imshow('Optical_Flow', flowFrame)
+    # cv2.imshow('Optical_Flow', flowFrame)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
