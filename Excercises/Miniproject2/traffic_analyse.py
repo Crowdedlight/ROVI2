@@ -122,7 +122,7 @@ nearestNeighbourThreshold = 35
 
 # Homography to take perspective into account #
 old_corners = np.array([[450, 235], [1385, 312], [1362, 928], [396, 711]])
-new_corners = np.array([[846, 20], [639, 573], [266, 442], [361, 178]]) * 2
+new_corners = np.array([[846, 20], [639, 573], [266, 442], [361, 178]]) * 1
 
 H, _ = cv2.findHomography(old_corners, new_corners)
 invH = inv(H)
@@ -228,8 +228,7 @@ while cap.isOpened():
         # Remove invalid kalman filters
         for i in sorted(indexList,reverse=True):
             # Push trajectories to array before deleting filter
-            print(k_filters[i].getTrajectoryPath())
-            trajectories.append(k_filters[i].getTrajectoryPath())
+            trajectories.append(np.array([k_filters[i].getTrajectoryPath()]))
             del k_filters[i]
 
         # plot from kalman results
@@ -249,14 +248,24 @@ while cap.isOpened():
 cap.release()
 cv2.destroyAllWindows()
 
-print(trajectories)
+# print(trajectories[0])
 
 # Plot image and all trajectories
 
 # load in image
+refImg = cv2.imread("maps3.png", cv2.IMREAD_COLOR)
 
 # genereate random colors in length of trajectories
+colorArray = np.random.randint(0, 255, (len(trajectories), 3))
 
 # draw trajectores
+for idx, t in enumerate(trajectories):
+    # print("########################")
+    # print(t)
+    cv2.polylines(refImg, t, False, colorArray[idx].tolist(), 4)
 
 # show result
+cv2.imshow("trajectories", refImg)
+
+if cv2.waitKey() & 0xFF == ord('q'):
+    exit(1)

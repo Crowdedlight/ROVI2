@@ -82,7 +82,9 @@ class KalmanFilter(object):
 
         # Save new pos in trajectory
         newP = np.array(self.getPosition())
-        self.trajectoryPath.append(newP)
+        x_n = int(round(newP[0]))
+        y_n = int(round(newP[1]))
+        self.trajectoryPath.append(np.array([x_n, y_n]))
 
         return x
 
