@@ -22,6 +22,9 @@ class KalmanFilter(object):
         self.boxWidth = boxWidth
         self.boxHeight = boxHeight
 
+        # trajectory
+        self.trajectoryPath = []
+
         # Members for detecting self-destruct condition
         self.maxPredictions = maxPredictions
         self.predictionCount = 0
@@ -77,6 +80,9 @@ class KalmanFilter(object):
 
             self.selfDestruct = True
 
+        # Save new pos in trajectory
+        newP = np.array(self.getPosition())
+        self.trajectoryPath.append(newP)
 
         return x
 
@@ -166,3 +172,6 @@ class KalmanFilter(object):
             return np.arccos(np.clip(np.dot(v1_u, v2_u), -1.0, 1.0))
 
         return angle_between(vec1,vec2)
+
+    def getTrajectoryPath(self):
+        return self.trajectoryPath

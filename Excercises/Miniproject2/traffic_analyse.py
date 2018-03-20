@@ -4,7 +4,7 @@ from numpy.linalg import inv, norm
 from scipy.spatial import distance
 from kalman import KalmanFilter
 
-
+#empty passer for trackbars
 def nothing(x):
     pass
 
@@ -83,6 +83,7 @@ def nearestNeighbour(k_pos, components):
 
     return closest_idx, dists[0][closest_idx]
 
+
 def pixVel2realVel(pixVel,mPerPix):
     # Calculate the velocity in km/h from pixel/s
 
@@ -97,6 +98,8 @@ def realVel2PixelVel(realVel,mPerPix):
 
     return v_pixel
 
+
+## Windows & Trackbars
 cv2.namedWindow("frame", cv2.WINDOW_NORMAL)
 cv2.namedWindow("unprocessed_frame", cv2.WINDOW_NORMAL)
 
@@ -114,10 +117,15 @@ cv2.setTrackbarPos('closing', 'frame', 4) #
 cap = cv2.VideoCapture('2015_06_27_1630_Krydset_Motorvejsafkørsel_52.mp4')
 fgbg = cv2.createBackgroundSubtractorMOG2(detectShadows=False, history=50, varThreshold=30)
 k_filters = []
+trajectories = []
+nearestNeighbourThreshold = 35
 
 # Homography to take perspective into account #
 old_corners = np.array([[450, 235], [1385, 312], [1362, 928], [396, 711]])
 new_corners = np.array([[846, 20], [639, 573], [266, 442], [361, 178]]) * 2
+
+H, _ = cv2.findHomography(old_corners, new_corners)
+invH = inv(H)
 
 # Pixel distance
 a = np.array([new_corners[0,0],new_corners[0,1]])
@@ -159,7 +167,7 @@ while cap.isOpened():
     components = thresholdComponents(stats, centroids)
 
     if len(components) != 0:
-        homografed = doHomography(components, H) # todo super ugly hack
+        homografed = doHomography(components, H)
 
         # nearest neighbour
         for k in k_filters:
@@ -172,7 +180,7 @@ while cap.isOpened():
             # get nearest component
             index, dist = nearestNeighbour(k.getPosition(), homografed)
             # if component is too far away, skip this array ==> continue
-            if dist > 35:
+            if dist > nearestNeighbourThreshold:
                 k.update()
             else:
                 x_c = homografed[index][0]
@@ -219,6 +227,9 @@ while cap.isOpened():
 
         # Remove invalid kalman filters
         for i in sorted(indexList,reverse=True):
+            # Push trajectories to array before deleting filter
+            print(k_filters[i].getTrajectoryPath())
+            trajectories.append(k_filters[i].getTrajectoryPath())
             del k_filters[i]
 
         # plot from kalman results
@@ -237,3 +248,15 @@ while cap.isOpened():
 
 cap.release()
 cv2.destroyAllWindows()
+
+print(trajectories)
+
+# Plot image and all trajectories
+
+# load in image
+
+# genereate random colors in length of trajectories
+
+# draw trajectores
+
+# show result
