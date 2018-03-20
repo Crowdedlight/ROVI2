@@ -1,0 +1,4 @@
+<launch>
+  <node name="rocketsimulator" pkg="rocketbot" type="rocket_bot.py" />
+  <node name="rocketcontroller" pkg="rocketbot" type="thruster_oo.py" />
+</launch>
