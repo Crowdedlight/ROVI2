@@ -90,6 +90,13 @@ def pixVel2realVel(pixVel,mPerPix):
 
     return v_real
 
+def realVel2PixelVel(realVel,mPerPix):
+    # Calculate the velocity in km/h from pixel/s
+
+    v_pixel = realVel/(mPerPix*3.6)
+
+    return v_pixel
+
 cv2.namedWindow("frame", cv2.WINDOW_NORMAL)
 cv2.namedWindow("unprocessed_frame", cv2.WINDOW_NORMAL)
 
@@ -121,6 +128,14 @@ d = norm(b - a)
 meas_d = 400 # [meters]
 
 meterPerPixel = meas_d / d
+
+# Kalman filter thresholds
+# Velocity threshold
+v_thresh = realVel2PixelVel(10, meterPerPixel)
+# Max predictions
+max_predictions = 100
+# Amount of corrections before kf is valid
+corrections = 20
 
 H, _ = cv2.findHomography(old_corners, new_corners)
 invH = inv(H)
@@ -157,7 +172,7 @@ while cap.isOpened():
             # get nearest component
             index, dist = nearestNeighbour(k.getPosition(), homografed)
             # if component is too far away, skip this array ==> continue
-            if dist > 25:
+            if dist > 35:
                 k.update()
             else:
                 x_c = homografed[index][0]
@@ -176,7 +191,8 @@ while cap.isOpened():
             state = np.array([[c[0]], [c[1]], [0], [0]])
             fps = cap.get(cv2.CAP_PROP_FPS)
             # state, fps, boxWidth, box Height
-            k_filters.append(KalmanFilter(state, 1.0/fps, c[2], c[3], 50, 0, 30))
+
+            k_filters.append(KalmanFilter(state, 1.0/fps, c[2], c[3], max_predictions, v_thresh, corrections))
 
     else:
         # no detections, just update kalman filters

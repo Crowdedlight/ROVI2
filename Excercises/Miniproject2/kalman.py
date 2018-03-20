@@ -35,8 +35,8 @@ class KalmanFilter(object):
         self.velocityThreshold = velocityThresh
 
         # Error matrices from Agus lecture
-        measurementNoise    = 0.3
-        modelNoise          = 4
+        measurementNoise    = 0.1
+        modelNoise          = 2
         self.Q      = np.eye(4)*modelNoise**2*dt
         self.R      = np.eye(2)*measurementNoise**2/dt
 
@@ -67,12 +67,16 @@ class KalmanFilter(object):
             self.predictionCount += 1
 
         angle = self.checkAngleDifference(x0,x)
-
-        if self.predictionCount > self.maxPredictions or abs(angle) > pi/2:
-            self.selfDestruct = True
+        abs_vel = self.getAbsVelocity()
 
         if self.correctionCount > self.startDelay:
             self.valid = True
+
+        if (self.predictionCount > self.maxPredictions) or (abs(angle) > pi/2) or \
+                                    (self.valid and abs_vel < self.velocityThreshold):
+
+            self.selfDestruct = True
+
 
         return x
 
