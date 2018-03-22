@@ -115,7 +115,7 @@ while cap.isOpened():
 
     # Subtract this from current frame to get moving parts?
     running_res = cv2.absdiff(currFrame, running_res)
-    _, running_res_thres = cv2.threshold(running_res, thrs_avg, 255, cv2.THRESH_BINARY_INV)
+    _, running_res_thres = cv2.threshold(running_res, thrs_avg, 255, cv2.THRESH_BINARY)
 
 
     # Temperal difference #
