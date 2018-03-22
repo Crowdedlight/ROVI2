@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 from numpy.linalg import inv, norm
 from scipy.spatial import distance
-from kalman import KalmanFilter
+from kalman_acc import KalmanFilter
 
 #empty passer for trackbars
 def nothing(x):
@@ -110,15 +110,15 @@ cv2.createTrackbar('closing','frame',1,100, nothing)
 
 # Init pos
 cv2.setTrackbarPos('cc_min', 'frame', 38) #38
-cv2.setTrackbarPos('opening', 'frame', 3) #
+cv2.setTrackbarPos('opening', 'frame', 2) #
 cv2.setTrackbarPos('closing', 'frame', 4) #
 
 ### Params ###
 cap = cv2.VideoCapture('2015_06_27_1630_Krydset_Motorvejsafkørsel_52.mp4')
-fgbg = cv2.createBackgroundSubtractorMOG2(detectShadows=False, history=50, varThreshold=30)
+fgbg = cv2.createBackgroundSubtractorMOG2(detectShadows=False, history=50, varThreshold=40)
 k_filters = []
 trajectories = []
-nearestNeighbourThreshold = 35
+nearestNeighbourThreshold = 25
 
 # Homography to take perspective into account #
 old_corners = np.array([[450, 235], [1385, 312], [1362, 928], [396, 711]])
@@ -141,7 +141,7 @@ meterPerPixel = meas_d / d
 # Velocity threshold
 v_thresh = realVel2PixelVel(10, meterPerPixel)
 # Max predictions
-max_predictions = 80
+max_predictions = 100
 # Amount of corrections before kf is valid
 corrections = 20
 
@@ -190,10 +190,13 @@ while cap.isOpened():
                 # remove component from components list and keep going
                 del homografed[index]
 
+            # todo, if it haven't received corrections for some time, kill filter
+
+
         # For remainders in components that do not have a friend in k
         for c in homografed:
             # make new kalman filter
-            state = np.array([[c[0]], [c[1]], [0], [0]])
+            state = np.array([[c[0]], [c[1]], [0], [0], [0], [0]])
             fps = cap.get(cv2.CAP_PROP_FPS)
             # state, fps, boxWidth, box Height
 
@@ -225,7 +228,8 @@ while cap.isOpened():
         # Remove invalid kalman filters
         for i in sorted(indexList,reverse=True):
             # Push trajectories to array before deleting filter
-            trajectories.append(np.array([k_filters[i].getTrajectoryPath()]))
+            if k_filters[i].validFilter():
+                trajectories.append(np.array([k_filters[i].getTrajectoryPath()]))
             del k_filters[i]
 
         # plot from kalman results
@@ -234,7 +238,7 @@ while cap.isOpened():
             v_real = pixVel2realVel(vel,meterPerPixel)
             v_real_str = str(v_real)[:5] + " km/h"
             cv2.rectangle(outFrame, (left, top), (left + width, top + height), (0, 0, 255), 2)
-            cv2.putText(currFrame, v_real_str, (left + width + 10, top + height), 0, 1, (0, 0, 255), 2)
+            cv2.putText(currFrame, v_real_str, (left + width + 10, top + height), 0, 0.8, (0, 0, 255), 2)
 
     # cv2.imshow('frame', foregroundFrame)
     cv2.imshow('unprocessed_frame', outFrame)
