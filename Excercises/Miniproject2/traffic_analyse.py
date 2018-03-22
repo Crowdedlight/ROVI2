@@ -234,7 +234,7 @@ while cap.isOpened():
             v_real = pixVel2realVel(vel,meterPerPixel)
             v_real_str = str(v_real)[:5] + " km/h"
             cv2.rectangle(outFrame, (left, top), (left + width, top + height), (0, 0, 255), 2)
-            cv2.putText(currFrame, v_real_str, (left + width + 10, top + height), 0, 0.8, (0, 0, 255), 2)
+            cv2.putText(currFrame, v_real_str, (left + width + 10, top + height), 0, 1, (0, 0, 255), 2)
 
     # cv2.imshow('frame', foregroundFrame)
     cv2.imshow('unprocessed_frame', outFrame)
