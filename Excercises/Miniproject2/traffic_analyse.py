@@ -122,7 +122,7 @@ nearestNeighbourThreshold = 35
 
 # Homography to take perspective into account #
 old_corners = np.array([[450, 235], [1385, 312], [1362, 928], [396, 711]])
-new_corners = np.array([[846, 20], [639, 573], [266, 442], [361, 178]]) * 1
+new_corners = np.array([[846, 20], [639, 573], [266, 442], [361, 178]]) * 2
 
 H, _ = cv2.findHomography(old_corners, new_corners)
 invH = inv(H)
