@@ -38,8 +38,8 @@ class KalmanFilter(object):
         self.velocityThreshold = velocityThresh
 
         # Error matrices from Agus lecture
-        measurementNoise    = 0.1
-        modelNoise          = 2
+        measurementNoise    = 0.3
+        modelNoise          = 4
         self.Q      = np.eye(4)*modelNoise**2*dt
         self.R      = np.eye(2)*measurementNoise**2/dt
 

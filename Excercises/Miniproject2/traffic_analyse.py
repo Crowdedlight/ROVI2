@@ -141,7 +141,7 @@ meterPerPixel = meas_d / d
 # Velocity threshold
 v_thresh = realVel2PixelVel(10, meterPerPixel)
 # Max predictions
-max_predictions = 100
+max_predictions = 80
 # Amount of corrections before kf is valid
 corrections = 20
 
@@ -189,9 +189,6 @@ while cap.isOpened():
 
                 # remove component from components list and keep going
                 del homografed[index]
-
-            # todo, if it haven't received corrections for some time, kill filter
-
 
         # For remainders in components that do not have a friend in k
         for c in homografed:
@@ -265,7 +262,19 @@ for idx, t in enumerate(trajectories):
     cv2.polylines(refImg, t, False, colorArray[idx].tolist(), 4)
 
 # show result
-cv2.imshow("trajectories", refImg)
+import matplotlib
+matplotlib.use('Qt5Agg')
+import matplotlib.pyplot as plt
+plt.figure(figsize=(6, 4))
+plt.xlabel('x')
+plt.ylabel('y')
+ax = plt.subplot()
+ax.xaxis.tick_top()
+ax.xaxis.set_label_position('top')
+plt.imshow(refImg)
+plt.show()
+
+# cv2.imshow("trajectories", refImg)
 
 if cv2.waitKey() & 0xFF == ord('q'):
     exit(1)
