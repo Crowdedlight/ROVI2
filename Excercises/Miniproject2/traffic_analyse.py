@@ -141,7 +141,7 @@ meterPerPixel = meas_d / d
 # Velocity threshold
 v_thresh = realVel2PixelVel(10, meterPerPixel)
 # Max predictions
-max_predictions = 100
+max_predictions = 80
 # Amount of corrections before kf is valid
 corrections = 20
 
@@ -228,7 +228,7 @@ while cap.isOpened():
         # Remove invalid kalman filters
         for i in sorted(indexList,reverse=True):
             # Push trajectories to array before deleting filter
-            print(k_filters[i].getTrajectoryPath())
+            #print(k_filters[i].getTrajectoryPath())
             trajectories.append(k_filters[i].getTrajectoryPath())
             del k_filters[i]
 
@@ -238,7 +238,7 @@ while cap.isOpened():
             v_real = pixVel2realVel(vel,meterPerPixel)
             v_real_str = str(v_real)[:5] + " km/h"
             cv2.rectangle(outFrame, (left, top), (left + width, top + height), (0, 0, 255), 2)
-            cv2.putText(currFrame, v_real_str, (left + width + 10, top + height), 0, 0.8, (0, 0, 255), 2)
+            cv2.putText(currFrame, v_real_str, (left + width + 10, top + height), 0, 1, (0, 0, 255), 2)
 
     # cv2.imshow('frame', foregroundFrame)
     cv2.imshow('unprocessed_frame', outFrame)
@@ -249,7 +249,7 @@ while cap.isOpened():
 cap.release()
 cv2.destroyAllWindows()
 
-print(trajectories)
+#print(trajectories)
 
 # Plot image and all trajectories
 
