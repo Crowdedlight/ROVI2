@@ -1,0 +1,2 @@
+/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libsystemcmds__tune_control.a  CMakeFiles/systemcmds__tune_control.dir/tune_control.cpp.o
+/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libsystemcmds__tune_control.a

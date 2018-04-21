@@ -1,0 +1,2 @@
+/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libmodules__bottle_drop.a  CMakeFiles/modules__bottle_drop.dir/bottle_drop.cpp.o
+/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libmodules__bottle_drop.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libsystemcmds__ver.a  CMakeFiles/systemcmds__ver.dir/ver.c.o
+/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libsystemcmds__ver.a

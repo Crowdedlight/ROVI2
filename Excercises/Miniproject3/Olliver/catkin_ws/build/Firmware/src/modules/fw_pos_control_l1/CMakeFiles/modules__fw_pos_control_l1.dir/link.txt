@@ -1,0 +1,2 @@
+/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libmodules__fw_pos_control_l1.a  CMakeFiles/modules__fw_pos_control_l1.dir/FixedwingPositionControl.cpp.o CMakeFiles/modules__fw_pos_control_l1.dir/Landingslope.cpp.o
+/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libmodules__fw_pos_control_l1.a

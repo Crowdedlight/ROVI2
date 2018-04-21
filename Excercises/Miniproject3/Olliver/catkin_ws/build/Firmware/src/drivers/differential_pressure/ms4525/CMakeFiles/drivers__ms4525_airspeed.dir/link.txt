@@ -1,0 +1,2 @@
+/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__ms4525_airspeed.a  CMakeFiles/drivers__ms4525_airspeed.dir/ms4525_airspeed.cpp.o
+/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__ms4525_airspeed.a

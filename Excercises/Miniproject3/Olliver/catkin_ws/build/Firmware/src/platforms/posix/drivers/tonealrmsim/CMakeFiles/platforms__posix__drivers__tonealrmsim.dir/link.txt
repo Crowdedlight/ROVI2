@@ -1,0 +1,2 @@
+/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libplatforms__posix__drivers__tonealrmsim.a  CMakeFiles/platforms__posix__drivers__tonealrmsim.dir/tone_alarm.cpp.o
+/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libplatforms__posix__drivers__tonealrmsim.a

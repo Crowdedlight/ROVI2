@@ -1,0 +1,26 @@
+\subsubsection usage Usage
+\verbatim
+<node name="test_reconfigure_server_cpp" pkg="dynamic_reconfigure_test" type="test_reconfigure_server_cpp">
+  <param name="int_enum_" type="int" value="0" />
+  <param name="int_" type="int" value="0" />
+  <param name="double_" type="double" value="0.0" />
+  <param name="double_no_minmax" type="double" value="1.0" />
+  <param name="double_no_max" type="double" value="2.0" />
+  <param name="str_" type="str" value="foo" />
+  <param name="mstr_" type="str" value="bar" />
+  <param name="bool_" type="bool" value="False" />
+  <param name="level" type="int" value="0" />
+  <param name="int_nodefault" type="int" value="0" />
+  <param name="i" type="int" value="0" />
+  <param name="group1_int" type="int" value="2" />
+  <param name="group2_double" type="double" value="3.333" />
+  <param name="group2_string" type="str" value="test string" />
+  <param name="some_other" type="str" value="AAAAAAGGHH" />
+  <param name="variable" type="bool" value="True" />
+  <param name="deep_var_int" type="int" value="0" />
+  <param name="deep_var_bool" type="bool" value="True" />
+  <param name="deep_var_double" type="double" value="-1.0" />
+  <param name="some_param" type="int" value="20" />
+</node>
+\endverbatim
+

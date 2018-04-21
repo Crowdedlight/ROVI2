@@ -1,0 +1,8 @@
+prefix=/home/olliver/localbuild/catkin_ws/install
+
+Name: offboardnode
+Description: Description of offboardnode
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/olliver/localbuild/catkin_ws/install/lib -loffboardnode
+Requires: geometry_msgs mavros_msgs roscpp rospy

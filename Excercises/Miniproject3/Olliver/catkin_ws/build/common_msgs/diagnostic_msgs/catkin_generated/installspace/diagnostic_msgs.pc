@@ -1,0 +1,8 @@
+prefix=/home/olliver/localbuild/catkin_ws/install
+
+Name: diagnostic_msgs
+Description: Description of diagnostic_msgs
+Version: 1.12.5
+Cflags: -I/home/olliver/localbuild/catkin_ws/install/include
+Libs: -L/home/olliver/localbuild/catkin_ws/install/lib 
+Requires: message_runtime std_msgs

@@ -1,0 +1,25 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~int_enum_" : \b [int] Int enum min: 0, default: 0, max: 3
+- \b "~int_" : \b [int] Int parameter min: -10, default: 0, max: 10
+- \b "~double_" : \b [double] double parameter min: -2.0, default: 0.0, max: 10.0
+- \b "~double_no_minmax" : \b [double] double parameter without boundaries min: -std::numeric_limits<double>::infinity(), default: 1.0, max: std::numeric_limits<double>::infinity()
+- \b "~double_no_max" : \b [double] double parameter without max value min: 0.0, default: 2.0, max: std::numeric_limits<double>::infinity()
+- \b "~str_" : \b [str] String parameter min: , default: foo, max: 
+- \b "~mstr_" : \b [str] Multibyte String parameter min: , default: bar, max: 
+- \b "~bool_" : \b [bool] Boolean parameter min: False, default: False, max: True
+- \b "~level" : \b [int] Contains the level of the previous change min: -2147483648, default: 0, max: 2147483647
+- \b "~int_nodefault" : \b [int] Checks against regression of #4499 min: -2147483648, default: 0, max: 2147483647
+- \b "~i" : \b [int] Checks against regression of https://github.com/ros/dynamic_reconfigure/issues/6 min: -2147483648, default: 0, max: 2147483647
+- \b "~group1_int" : \b [int] A second level group parameter min: -2147483648, default: 2, max: 2147483647
+- \b "~group2_double" : \b [double] A third level group parameter min: -std::numeric_limits<double>::infinity(), default: 3.333, max: std::numeric_limits<double>::infinity()
+- \b "~group2_string" : \b [str] A third level group parameter min: , default: test string, max: 
+- \b "~some_other" : \b [str] Something min: , default: AAAAAAGGHH, max: 
+- \b "~variable" : \b [bool] A boolean min: False, default: True, max: True
+- \b "~deep_var_int" : \b [int] Were very far down now min: 0, default: 0, max: 3
+- \b "~deep_var_bool" : \b [bool] Were even farther down now!! min: False, default: True, max: True
+- \b "~deep_var_double" : \b [double] Were super far down now!! min: -std::numeric_limits<double>::infinity(), default: -1.0, max: std::numeric_limits<double>::infinity()
+- \b "~some_param" : \b [int] Some param min: -2147483648, default: 20, max: 2147483647
+

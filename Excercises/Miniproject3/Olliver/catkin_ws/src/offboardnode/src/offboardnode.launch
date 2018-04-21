@@ -1,0 +1,3 @@
+<launch>
+ <node name="testingoffboardnode" pkg="offboardnode" type="offboardnode" />
+</launch>

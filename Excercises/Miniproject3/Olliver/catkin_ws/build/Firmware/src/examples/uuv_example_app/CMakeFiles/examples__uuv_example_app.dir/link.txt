@@ -1,0 +1,2 @@
+/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libexamples__uuv_example_app.a  CMakeFiles/examples__uuv_example_app.dir/uuv_example_app.cpp.o
+/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libexamples__uuv_example_app.a

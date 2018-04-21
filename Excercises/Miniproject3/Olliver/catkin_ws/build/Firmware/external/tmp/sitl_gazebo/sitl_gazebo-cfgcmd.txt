@@ -1,0 +1,1 @@
+cmd='/usr/bin/cmake;-DCMAKE_INSTALL_PREFIX=/home/olliver/localbuild/catkin_ws/install;-GUnix Makefiles;/home/olliver/localbuild/catkin_ws/src/Firmware/Tools/sitl_gazebo'

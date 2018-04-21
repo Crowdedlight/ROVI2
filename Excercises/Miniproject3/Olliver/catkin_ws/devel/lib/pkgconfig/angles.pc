@@ -1,0 +1,8 @@
+prefix=/home/olliver/localbuild/catkin_ws/devel
+
+Name: angles
+Description: Description of angles
+Version: 1.9.11
+Cflags: -I/home/olliver/localbuild/catkin_ws/src/angles/angles/include
+Libs: -L/home/olliver/localbuild/catkin_ws/devel/lib 
+Requires: 

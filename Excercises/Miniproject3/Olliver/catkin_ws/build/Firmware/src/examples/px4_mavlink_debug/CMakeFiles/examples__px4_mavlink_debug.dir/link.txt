@@ -1,0 +1,2 @@
+/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libexamples__px4_mavlink_debug.a  CMakeFiles/examples__px4_mavlink_debug.dir/px4_mavlink_debug.c.o
+/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libexamples__px4_mavlink_debug.a

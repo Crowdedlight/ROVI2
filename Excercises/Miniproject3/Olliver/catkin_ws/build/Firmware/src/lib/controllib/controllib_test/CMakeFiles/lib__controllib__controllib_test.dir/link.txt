@@ -1,0 +1,2 @@
+/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/liblib__controllib__controllib_test.a  CMakeFiles/lib__controllib__controllib_test.dir/controllib_test_main.cpp.o
+/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/liblib__controllib__controllib_test.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libsystemcmds__reboot.a  CMakeFiles/systemcmds__reboot.dir/reboot.c.o
+/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libsystemcmds__reboot.a
