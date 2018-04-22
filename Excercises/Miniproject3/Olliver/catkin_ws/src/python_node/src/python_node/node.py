@@ -5,7 +5,22 @@ from mavros_msgs.srv import SetMode, CommandBool
 from math import cos, sin, pi, atan2, asin, degrees
 
 current_state = State()
+current_pose = PoseStamped()
 
+def euler_angle_2_quaternion(R,P,Y):
+	cr = cos(R * 0.5)
+	sr = sin(R * 0.5)
+	cp = cos(P * 0.5)
+	sp = sin(P * 0.5)
+	cy = cos(Y * 0.5)
+	sy = sin(Y * 0.5)
+
+	w = cy * cr * cp + sy * sr * sp
+	x = cy * sr * cp - sy * cr * sp
+	y = cy * cr * sp + sy * sr * cp
+	z = sy * cr * cp - cy * sr * sp
+
+	return w, x, y, z
 
 def quaternion_to_euler_angle(w, x, y, z):
 	ysqr = y * y
@@ -25,14 +40,13 @@ def quaternion_to_euler_angle(w, x, y, z):
 
 	return X, Y, Z
 
-def quaternion2yaw(pose):
-	q0 = pose.pose.orientation.w
-	q1 = pose.pose.orientation.x
-	q2 = pose.pose.orientation.y
-	q3 = pose.pose.orientation.z
+def quaternion_mult(q1,q2):
+	w = q1.w*q2.w - q1.x*q2.x - q1.y*q2.y - q1.z*q2.z
+	x = q1.w*q2.x + q1.x*q2.w + q1.y*q2.z - q1.z*q2.y
+	y = q1.w*q2.y + q1.y*q2.w + q1.z*q2.x - q1.x*q2.z
+	z = q1.w*q2.z + q1.z*q2.w + q1.x*q2.y - q1.y*q2.x
 
-
-	return atan2(2*(q0*q3+q1*q2), 1 - 2*(q2**2+q3**2))
+	return w, x, y, z
 
 def cb_print_orientation(data):
 	q0 = data.pose.orientation.w
@@ -41,7 +55,10 @@ def cb_print_orientation(data):
 	q3 = data.pose.orientation.z
 	roll, pitch, yaw = quaternion_to_euler_angle(q0,q1,q2,q3)
 
-	rospy.loginfo("R: {} P: {} Y: {}".format(roll,pitch,yaw))
+	global current_pose
+	current_pose = data
+
+	rospy.loginfo("Yaw Angle: {}".format(yaw))
 
 def callback(data):
 	global current_state
@@ -64,6 +81,9 @@ def main():
 	set_mode_client = rospy.ServiceProxy("mavros/set_mode", SetMode)
 
 	pose = PoseStamped()
+	delta_pose = PoseStamped(
+
+	)
 	pose.pose.position.x = 0
 	pose.pose.position.y = 0
 	pose.pose.position.z = 2
@@ -72,18 +92,22 @@ def main():
 	roll = 0 * pi / 180
 	pitch = 0 * pi / 180
 
-	cy = cos(yaw * 0.5)
-	sy = sin(yaw * 0.5)
-	cr = cos(roll * 0.5)
-	sr = sin(roll * 0.5)
-	cp = cos(pitch * 0.5)
-	sp = sin(pitch * 0.5)
+	w, x, y, z = euler_angle_2_quaternion(roll,pitch,yaw)
 
-	pose.pose.orientation.w = cy * cr * cp + sy * sr * sp
-	pose.pose.orientation.x = cy * sr * cp - sy * cr * sp
-	pose.pose.orientation.y = cy * cr * sp + sy * sr * cp
-	pose.pose.orientation.z = sy * cr * cp - cy * sr * sp
+	pose.pose.orientation.w = w
+	pose.pose.orientation.x = x
+	pose.pose.orientation.y = y
+	pose.pose.orientation.z = z
 
+	yaw = 10 * pi / 180
+	w, x, y, z = euler_angle_2_quaternion(roll,pitch,yaw)
+	delta_pose.pose.position.x = 0
+	delta_pose.pose.position.y = 0
+	delta_pose.pose.position.z = 0
+	delta_pose.pose.orientation.w = w
+	delta_pose.pose.orientation.x = x
+	delta_pose.pose.orientation.y = y
+	delta_pose.pose.orientation.z = z
 	# you must publish set points to the drone before you can change the mode
 	for i in range(1,10):
 		pub.publish(pose)
@@ -94,6 +118,11 @@ def main():
 
 	while not rospy.is_shutdown():
 
+		w, x, y, z = quaternion_mult(current_pose.pose.orientation, delta_pose.pose.orientation)
+		pose.pose.orientation.w = w
+		pose.pose.orientation.x = x
+		pose.pose.orientation.y = y
+		pose.pose.orientation.z = z
 		pub.publish(pose)
 		rate.sleep()
 
