@@ -1,0 +1,15 @@
+/build/
+/devel/
+.catkin_workspace
+
+/src/Firmware/
+/src/angles/
+/src/cmake_modules/
+/src/common_msgs/
+/src/control_msgs/
+/src/control_toolbox/
+/src/dynamic_reconfigure/
+/src/realtime_tools/
+/src/MarkerLocator
+
+*.pyc
