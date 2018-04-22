@@ -1,8 +1,0 @@
-prefix=/home/olliver/localbuild/catkin_ws/devel
-
-Name: px4
-Description: Description of px4
-Version: 1.0.0
-Cflags: 
-Libs: -L/home/olliver/localbuild/catkin_ws/devel/lib 
-Requires: 

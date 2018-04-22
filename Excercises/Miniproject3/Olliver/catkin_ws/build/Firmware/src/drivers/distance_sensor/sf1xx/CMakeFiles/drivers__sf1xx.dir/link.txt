@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__sf1xx.a  CMakeFiles/drivers__sf1xx.dir/sf1xx.cpp.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__sf1xx.a

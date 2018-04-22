@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__batt_smbus.a  CMakeFiles/drivers__batt_smbus.dir/batt_smbus.cpp.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__batt_smbus.a

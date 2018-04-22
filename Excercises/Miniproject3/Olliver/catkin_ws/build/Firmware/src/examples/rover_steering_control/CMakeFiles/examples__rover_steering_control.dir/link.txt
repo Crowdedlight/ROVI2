@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libexamples__rover_steering_control.a  CMakeFiles/examples__rover_steering_control.dir/main.cpp.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libexamples__rover_steering_control.a

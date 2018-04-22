@@ -1,8 +1,0 @@
-prefix=/home/olliver/localbuild/catkin_ws/install
-
-Name: visualization_msgs
-Description: Description of visualization_msgs
-Version: 1.12.5
-Cflags: -I/home/olliver/localbuild/catkin_ws/install/include
-Libs: -L/home/olliver/localbuild/catkin_ws/install/lib 
-Requires: geometry_msgs message_runtime std_msgs

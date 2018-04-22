@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libmodules__sensors.a  CMakeFiles/modules__sensors.dir/voted_sensors_update.cpp.o CMakeFiles/modules__sensors.dir/rc_update.cpp.o CMakeFiles/modules__sensors.dir/sensors.cpp.o CMakeFiles/modules__sensors.dir/parameters.cpp.o CMakeFiles/modules__sensors.dir/temperature_compensation.cpp.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libmodules__sensors.a

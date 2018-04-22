@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libmodules__position_estimator_inav.a  CMakeFiles/modules__position_estimator_inav.dir/position_estimator_inav_main.cpp.o CMakeFiles/modules__position_estimator_inav.dir/inertial_filter.cpp.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libmodules__position_estimator_inav.a

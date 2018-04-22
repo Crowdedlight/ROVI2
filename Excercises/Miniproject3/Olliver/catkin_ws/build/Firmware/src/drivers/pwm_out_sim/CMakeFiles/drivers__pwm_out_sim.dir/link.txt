@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__pwm_out_sim.a  CMakeFiles/drivers__pwm_out_sim.dir/PWMSim.cpp.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__pwm_out_sim.a

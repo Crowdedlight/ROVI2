@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/liblib__version.a  CMakeFiles/lib__version.dir/version.c.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/liblib__version.a

@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/liblib__led.a  CMakeFiles/lib__led.dir/led.cpp.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/liblib__led.a

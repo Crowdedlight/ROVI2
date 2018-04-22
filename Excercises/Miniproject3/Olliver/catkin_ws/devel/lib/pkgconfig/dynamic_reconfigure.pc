@@ -1,8 +1,0 @@
-prefix=/home/olliver/localbuild/catkin_ws/devel
-
-Name: dynamic_reconfigure
-Description: Description of dynamic_reconfigure
-Version: 1.5.49
-Cflags: -I/home/olliver/localbuild/catkin_ws/devel/include -I/home/olliver/localbuild/catkin_ws/src/dynamic_reconfigure/include
-Libs: -L/home/olliver/localbuild/catkin_ws/devel/lib -ldynamic_reconfigure_config_init_mutex
-Requires: message_runtime std_msgs

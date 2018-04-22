@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__mb12xx.a  CMakeFiles/drivers__mb12xx.dir/mb12xx.cpp.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__mb12xx.a

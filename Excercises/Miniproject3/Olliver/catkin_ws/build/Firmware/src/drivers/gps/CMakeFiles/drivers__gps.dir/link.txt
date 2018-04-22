@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__gps.a  CMakeFiles/drivers__gps.dir/gps.cpp.o CMakeFiles/drivers__gps.dir/devices/src/gps_helper.cpp.o CMakeFiles/drivers__gps.dir/devices/src/mtk.cpp.o CMakeFiles/drivers__gps.dir/devices/src/ashtech.cpp.o CMakeFiles/drivers__gps.dir/devices/src/ubx.cpp.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__gps.a

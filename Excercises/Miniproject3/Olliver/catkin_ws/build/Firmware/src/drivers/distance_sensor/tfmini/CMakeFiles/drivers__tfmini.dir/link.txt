@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__tfmini.a  CMakeFiles/drivers__tfmini.dir/tfmini.cpp.o CMakeFiles/drivers__tfmini.dir/tfmini_parser.cpp.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__tfmini.a

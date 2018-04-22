@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libmodules__sdlog2.a  CMakeFiles/modules__sdlog2.dir/sdlog2.c.o CMakeFiles/modules__sdlog2.dir/logbuffer.c.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libmodules__sdlog2.a

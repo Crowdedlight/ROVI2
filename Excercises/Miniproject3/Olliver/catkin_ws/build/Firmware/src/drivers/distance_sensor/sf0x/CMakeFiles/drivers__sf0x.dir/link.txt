@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__sf0x.a  CMakeFiles/drivers__sf0x.dir/sf0x.cpp.o CMakeFiles/drivers__sf0x.dir/sf0x_parser.cpp.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__sf0x.a

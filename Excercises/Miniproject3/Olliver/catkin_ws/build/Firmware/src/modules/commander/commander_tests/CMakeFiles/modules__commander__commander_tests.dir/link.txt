@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libmodules__commander__commander_tests.a  CMakeFiles/modules__commander__commander_tests.dir/commander_tests.cpp.o CMakeFiles/modules__commander__commander_tests.dir/state_machine_helper_test.cpp.o CMakeFiles/modules__commander__commander_tests.dir/__/state_machine_helper.cpp.o CMakeFiles/modules__commander__commander_tests.dir/__/PreflightCheck.cpp.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libmodules__commander__commander_tests.a

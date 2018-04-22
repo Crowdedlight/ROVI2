@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__srf02_i2c.a  CMakeFiles/drivers__srf02_i2c.dir/srf02_i2c.cpp.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libdrivers__srf02_i2c.a

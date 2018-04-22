@@ -1,8 +1,0 @@
-prefix=/home/olliver/localbuild/catkin_ws/install
-
-Name: realtime_tools
-Description: Description of realtime_tools
-Version: 1.11.0
-Cflags: -I/home/olliver/localbuild/catkin_ws/install/include
-Libs: -L/home/olliver/localbuild/catkin_ws/install/lib -lrealtime_tools
-Requires: roscpp rospy

@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libsystemcmds__led_control.a  CMakeFiles/systemcmds__led_control.dir/led_control.cpp.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libsystemcmds__led_control.a

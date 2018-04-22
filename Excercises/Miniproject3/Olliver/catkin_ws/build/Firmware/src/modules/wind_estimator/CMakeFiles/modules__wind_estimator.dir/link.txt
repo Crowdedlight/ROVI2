@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/libmodules__wind_estimator.a  CMakeFiles/modules__wind_estimator.dir/wind_estimator_main.cpp.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/libmodules__wind_estimator.a

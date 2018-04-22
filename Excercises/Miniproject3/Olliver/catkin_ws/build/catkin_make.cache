@@ -1,2 +1,0 @@
-Firmware:angles/angles:cmake_modules:common_msgs/actionlib_msgs:common_msgs/common_msgs:common_msgs/diagnostic_msgs:common_msgs/geometry_msgs:common_msgs/nav_msgs:common_msgs/sensor_msgs:common_msgs/shape_msgs:common_msgs/stereo_msgs:common_msgs/trajectory_msgs:common_msgs/visualization_msgs:control_msgs/control_msgs:control_toolbox:dynamic_reconfigure:offboardnode:realtime_tools
--DCATKIN_DEVEL_PREFIX=/home/olliver/localbuild/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/olliver/localbuild/catkin_ws/install -G Unix Makefiles

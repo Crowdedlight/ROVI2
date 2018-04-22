@@ -1,2 +1,0 @@
-/usr/bin/ar qc /home/olliver/localbuild/catkin_ws/devel/lib/liblib__conversion.a  CMakeFiles/lib__conversion.dir/rotation.cpp.o
-/usr/bin/ranlib /home/olliver/localbuild/catkin_ws/devel/lib/liblib__conversion.a
