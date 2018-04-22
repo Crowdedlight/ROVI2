@@ -2,9 +2,28 @@ import rospy
 from geometry_msgs.msg import PoseStamped
 from mavros_msgs.msg import State
 from mavros_msgs.srv import SetMode, CommandBool
-from math import cos, sin, pi, atan2
+from math import cos, sin, pi, atan2, asin, degrees
 
 current_state = State()
+
+
+def quaternion_to_euler_angle(w, x, y, z):
+	ysqr = y * y
+
+	t0 = +2.0 * (w * x + y * z)
+	t1 = +1.0 - 2.0 * (x * x + ysqr)
+	X = degrees(atan2(t0, t1))
+
+	t2 = +2.0 * (w * y - z * x)
+	t2 = +1.0 if t2 > +1.0 else t2
+	t2 = -1.0 if t2 < -1.0 else t2
+	Y = degrees(asin(t2))
+
+	t3 = +2.0 * (w * z + x * y)
+	t4 = +1.0 - 2.0 * (ysqr + z * z)
+	Z = degrees(atan2(t3, t4))
+
+	return X, Y, Z
 
 def quaternion2yaw(pose):
 	q0 = pose.pose.orientation.w
@@ -12,12 +31,17 @@ def quaternion2yaw(pose):
 	q2 = pose.pose.orientation.y
 	q3 = pose.pose.orientation.z
 
+
 	return atan2(2*(q0*q3+q1*q2), 1 - 2*(q2**2+q3**2))
 
 def cb_print_orientation(data):
-	yaw = quaternion2yaw(data)
+	q0 = data.pose.orientation.w
+	q1 = data.pose.orientation.x
+	q2 = data.pose.orientation.y
+	q3 = data.pose.orientation.z
+	roll, pitch, yaw = quaternion_to_euler_angle(q0,q1,q2,q3)
 
-	rospy.loginfo(yaw*180/pi)
+	rospy.loginfo("R: {} P: {} Y: {}".format(roll,pitch,yaw))
 
 def callback(data):
 	global current_state
