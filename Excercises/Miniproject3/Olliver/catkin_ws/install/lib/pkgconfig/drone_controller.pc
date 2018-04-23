@@ -1,8 +1,0 @@
-prefix=/home/crow/Documents/ROVI2/Excercises/Miniproject3/Olliver/catkin_ws/install
-
-Name: drone_controller
-Description: Description of drone_controller
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/crow/Documents/ROVI2/Excercises/Miniproject3/Olliver/catkin_ws/install/lib 
-Requires: 

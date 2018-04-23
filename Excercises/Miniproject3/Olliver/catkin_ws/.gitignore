@@ -1,5 +1,6 @@
 /build/
 /devel/
+/install/
 .catkin_workspace
 
 /src/Firmware/
@@ -14,3 +15,4 @@
 
 *.pyc
 *.idea/
+*.vscode/

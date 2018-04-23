@@ -32,7 +32,7 @@ class image_converter:
         # cv2.imshow("Image window", cv_image)
 
         frame_gray = cv2.cvtColor(cv_image, cv2.COLOR_RGB2GRAY)
-        order = 3
+        order = 9
         kernel_size = 25
         scale_factor = 100
         mt = MarkerTracker(order, kernel_size, scale_factor)
