@@ -1,5 +1,5 @@
 import rospy
-from python_node.srv import MoveDrone
+from python_node.msg import MoveDrone
 from geometry_msgs.msg import PoseStamped
 from mavros_msgs.msg import State
 from mavros_msgs.srv import SetMode, CommandBool
@@ -14,18 +14,13 @@ current_pose = PoseStamped()
 pose = PoseStamped()
 
 def cb_print_orientation(data):
-	# q0 = data.pose.orientation.w
-	# q1 = data.pose.orientation.x
-	# q2 = data.pose.orientation.y
-	# q3 = data.pose.orientation.z
-	# roll, pitch, yaw = quaternion_to_euler_angle(q0,q1,q2,q3)
 	global current_pose
 	current_pose = data
 
 def callback(data):
 	global current_state
 	current_state = data
-	#rospy.loginfo(data)
+	rospy.loginfo(data)
 
 
 def main():
@@ -36,6 +31,7 @@ def main():
 	pub = rospy.Publisher("mavros/setpoint_position/local", PoseStamped, queue_size=10)
 
 	rate = rospy.Rate(10)
+
 	while not rospy.is_shutdown() and not current_state.connected:
 		rate.sleep()
 
@@ -107,7 +103,8 @@ def main():
 
 		return True
 
-	rospy.Service("move_drone",MoveDrone,service_handler)
+	rospy.Subscriber("move_drone", MoveDrone, service_handler)
+	# rospy.Service("move_drone",MoveDrone,service_handler)
 
 	while not rospy.is_shutdown():
 		pub.publish(pose)
