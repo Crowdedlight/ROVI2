@@ -38,13 +38,14 @@ class image_converter:
 		scale_factor = 100
 		mt = MarkerTracker(order, kernel_size, scale_factor)
 		self.pose = mt.locate_marker(frame_gray)
-		cv2.rectangle(cv_image, (self.pose.x+100, self.pose.y+100), (self.pose.x-100, self.pose.y-100), (0, 255, 0), 3)
-		cv2.imshow("Box",cv_image)
-		cv2.waitKey(3)
-		print("{} {} {} {} {} {}".format("x-pose:", self.pose.x, "y-pose:", self.pose.y, "theta:", self.pose.theta))
+		cv2.rectangle(frame_gray, (self.pose.x+100, self.pose.y+100), (self.pose.x-100, self.pose.y-100), (0, 255, 0), 3)
+				
+		# cv2.imshow("Box",cv_image)
+		# cv2.waitKey(3)
+		# print("{} {} {} {} {} {}".format("x-pose:", self.pose.x, "y-pose:", self.pose.y, "theta:", self.pose.theta))
 		height, width = cv_image.shape[:2]
 		try:
-			self.image_pub.publish(self.bridge.cv2_to_imgmsg(frame_gray, "8UC1"))
+			self.image_pub.publish(self.bridge.cv2_to_imgmsg(frame_gray, '8UC1'))
 			self.x_pose_pub.publish(self.pose.x-(width/2))
 			self.y_pose_pub.publish(self.pose.y-(height/2))
 			self.theta_pose_pub.publish(self.pose.theta)
@@ -60,7 +61,6 @@ def main(args):
 	except KeyboardInterrupt:
 		print("Shutting down")
 	cv2.destroyAllWindows()
-
 
 if __name__ == '__main__':
 	main(sys.argv)
