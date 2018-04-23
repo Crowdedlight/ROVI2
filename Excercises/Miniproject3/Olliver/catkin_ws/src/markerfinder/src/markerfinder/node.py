@@ -32,7 +32,7 @@ class image_converter:
         # cv2.imshow("Image window", cv_image)
 
         frame_gray = cv2.cvtColor(cv_image, cv2.COLOR_RGB2GRAY)
-        order = 10
+        order = 3
         kernel_size = 25
         scale_factor = 100
         mt = MarkerTracker(order, kernel_size, scale_factor)
@@ -48,7 +48,7 @@ class image_converter:
             # position out
             currX = self.pose.x - (width / 2)
             currY = self.pose.y - (height / 2)
-            msg = MarkerLocation(x = currX, y = currY, theta = self.pose.theta)
+            msg = MarkerLocation(x = currX, y = currY, theta = self.pose.theta, quality = self.pose.quality)
             self.marker_pose_pub.publish(msg)
 
             #camera feed with marker detection
