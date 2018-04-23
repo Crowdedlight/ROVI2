@@ -9,66 +9,69 @@ from quaternion import *
 import numpy as np
 from numpy.linalg import inv
 
-current_state = State()
-current_pose = PoseStamped()
-pose = PoseStamped()
+class DroneMove:
 
-def cb_print_orientation(data):
-	global current_pose
-	current_pose = data
+	def __init__(self):
+		self.current_state = State()
+		self.current_pose = PoseStamped()
+		self.next_pose = PoseStamped()
 
-def callback(data):
-	global current_state
-	current_state = data
-	#rospy.loginfo(data)
+		rospy.Subscriber("mavros/state", State, self.cb_state)
+		rospy.Subscriber("mavros/local_position/pose", PoseStamped, self.cb_print_orientation)
+		rospy.Subscriber("move_drone", MoveDrone, self.move_handler)
+
+		self.pub = rospy.Publisher("mavros/setpoint_position/local", PoseStamped, queue_size=10)
+
+		self.arming_client = rospy.ServiceProxy("mavros/cmd/arming", CommandBool)
+		self.set_mode_client = rospy.ServiceProxy("mavros/set_mode", SetMode)
+		self.rate = rospy.Rate(10)
 
 
-def main():
-	rospy.init_node("python_node")
-	rospy.Subscriber("mavros/state", State, callback)
-	rospy.Subscriber("mavros/local_position/pose", PoseStamped, cb_print_orientation)
+	def connect(self):
+		yaw = 0 * pi / 180
+		roll = 0 * pi / 180
+		pitch = 0 * pi / 180
 
-	pub = rospy.Publisher("mavros/setpoint_position/local", PoseStamped, queue_size=10)
+		q = euler_angle_2_quaternion(roll, pitch, yaw)
+		print("Quaternion: {}".format(q))
+		self.next_pose = PoseStamped()
+		args = [{'pose': {'position': [0, 0, 2], 'orientation': [q.x, q.y, q.z, q.w]}}]
+		fill_message_args(self.next_pose, args)
 
-	rate = rospy.Rate(10)
+		while not rospy.is_shutdown() and not self.current_state.connected:
+			self.rate.sleep()
 
-	while not rospy.is_shutdown() and not current_state.connected:
-		rate.sleep()
+		# you must publish set points to the drone before you can change the mode
+		for i in range(1, 10):
+			self.pub.publish(self.next_pose)
+			self.rate.sleep()
 
-	arming_client = rospy.ServiceProxy("mavros/cmd/arming", CommandBool)
-	set_mode_client = rospy.ServiceProxy("mavros/set_mode", SetMode)
+		self.set_mode_client(custom_mode="OFFBOARD")
+		self.arming_client(value=True)
 
-	yaw = 0 * pi / 180
-	roll = 0 * pi / 180
-	pitch = 0 * pi / 180
+	def run(self):
+		while not rospy.is_shutdown():
+			self.pub.publish(self.next_pose)
+			self.rate.sleep()
 
-	q = euler_angle_2_quaternion(roll,pitch,yaw)
-	print("Quaternion: {}".format(q))
-	global pose
-	pose = PoseStamped()
-	args = [{'pose': {'position': [0,0,2], 'orientation': [q.x, q.y, q.z, q.w]} }]
-	fill_message_args(pose, args)
+	def cb_print_orientation(self, data):
+		self.current_pose = data
 
-	rospy.loginfo(pose)
+	def cb_state(self, data):
+		self.current_state = data
+		# rospy.loginfo(data)
 
-	# you must publish set points to the drone before you can change the mode
-	for i in range(1,10):
-		pub.publish(pose)
-		rate.sleep()
 
-	set_mode_client(custom_mode="OFFBOARD")
-	arming_client(value=True)
-
-	def service_handler(req):
+	def move_handler(self, req):
 		X =req.x
 		Y =req.y
 		Z =req.z
 		yaw = req.yaw * pi / 180
 
-		print(current_pose)
+		print(self.current_pose)
 
-		world2drone = posestamped_to_transform(current_pose)
-		transform = transformation_matrix(current_pose.pose.orientation, X, Y, Z, yaw)
+		world2drone = posestamped_to_transform(self.current_pose)
+		transform = transformation_matrix(self.current_pose.pose.orientation, X, Y, Z, yaw)
 
 		# matrix_to_posestamped(transform)
 		# print(transform)
@@ -83,11 +86,10 @@ def main():
 
 		rospy.loginfo("Yawing {} degrees".format(yaw*180/pi))
 
-		global pose
-		q = perform_yaw(current_pose, yaw)
+		q = perform_yaw(self.current_pose, yaw)
 		args = [{'pose': {'position': [new_pos[0],new_pos[1],new_pos[2]],
 						  'orientation': [q.x, q.y, q.z, q.w]} }]
-		fill_message_args(pose,args)
+		fill_message_args(self.next_pose, args)
 		# w, x, y, z = euler_angle_2_quaternion(roll, pitch, yaw)
 		# delta_pose = PoseStamped()
 		# args = [{'pose': {'position': [0, 0, 2], 'orientation': [x, y, z, w]}}]
@@ -101,11 +103,9 @@ def main():
 		# fill_message_args(pose, args)
 
 
-		return True
+def main():
+	rospy.init_node("python_node")
 
-	rospy.Subscriber("move_drone", MoveDrone, service_handler)
-	# rospy.Service("move_drone",MoveDrone,service_handler)
-
-	while not rospy.is_shutdown():
-		pub.publish(pose)
-		rate.sleep()
+	drone = DroneMove()
+	drone.connect()
+	drone.run()
