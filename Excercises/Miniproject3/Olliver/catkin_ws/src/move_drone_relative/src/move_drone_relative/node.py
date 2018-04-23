@@ -20,7 +20,7 @@ def cb_print_orientation(data):
 def callback(data):
 	global current_state
 	current_state = data
-	rospy.loginfo(data)
+	#rospy.loginfo(data)
 
 
 def main():
@@ -68,7 +68,7 @@ def main():
 		print(current_pose)
 
 		world2drone = posestamped_to_transform(current_pose)
-		transform = transformation_matrix(current_pose.pose.orientation,X,Y,Z,yaw)
+		transform = transformation_matrix(current_pose.pose.orientation, X, Y, Z, yaw)
 
 		# matrix_to_posestamped(transform)
 		# print(transform)
