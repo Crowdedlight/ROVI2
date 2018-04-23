@@ -1,0 +1,8 @@
+prefix=/home/crow/Documents/ROVI2/Excercises/Miniproject3/Olliver/catkin_ws/install
+
+Name: move_drone_relative
+Description: Description of move_drone_relative
+Version: 0.0.0
+Cflags: -I/home/crow/Documents/ROVI2/Excercises/Miniproject3/Olliver/catkin_ws/install/include
+Libs: -L/home/crow/Documents/ROVI2/Excercises/Miniproject3/Olliver/catkin_ws/install/lib 
+Requires: 

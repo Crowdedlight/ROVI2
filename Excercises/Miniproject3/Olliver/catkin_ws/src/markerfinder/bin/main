@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-import markerfinder.markerfinder
+import markerfinder.node
 
 if __name__ == '__main__':
-    markerfinder.markerfinder.main()
+    markerfinder.node.main()
