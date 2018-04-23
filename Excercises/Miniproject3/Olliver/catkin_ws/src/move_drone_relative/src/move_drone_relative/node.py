@@ -1,5 +1,5 @@
 import rospy
-from python_node.msg import MoveDrone
+from move_drone_relative.msg import MoveDrone
 from geometry_msgs.msg import PoseStamped
 from mavros_msgs.msg import State
 from mavros_msgs.srv import SetMode, CommandBool
@@ -18,7 +18,7 @@ class DroneMove:
 
 		rospy.Subscriber("mavros/state", State, self.cb_state)
 		rospy.Subscriber("mavros/local_position/pose", PoseStamped, self.cb_print_orientation)
-		rospy.Subscriber("move_drone", MoveDrone, self.move_handler)
+		rospy.Subscriber("move_drone_relative/set_relative_pose", MoveDrone, self.move_handler)
 
 		self.pub = rospy.Publisher("mavros/setpoint_position/local", PoseStamped, queue_size=10)
 
