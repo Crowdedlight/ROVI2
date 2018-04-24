@@ -21,9 +21,9 @@ class Controller:
 		self.height_setpoint = 5
 		self.current_height = 2
 
-		self.P = 0.8
+		self.P = 0.5
 		self.I = 0#.0002
-		self.D = 0#.0009
+		self.D = 0.0009
 
 		self.int_sum = np.array([[0],[0],[0],[0]])
 		self.prev_error = np.array([[0],[0],[0],[0]])
@@ -61,7 +61,7 @@ class Controller:
 							z = cmd[2],#z_error,
 							yaw = cmd[3])#angle_error)
 
-		if self.current_height > 0.1:
+		if self.current_height > 0.1 and quality > 0.3:
 			self.setpoint_pub.publish(command)
 
 	def cb_update_GSD(self, msg):
@@ -70,7 +70,7 @@ class Controller:
 	def pid_control(self,x,y,z,angle):
 		error = np.array([[x],[y],[z],[angle]])
 
-		curr_time = time()
+		curr_time = rospy.get_time()
 		dedt = np.array([[0],[0],[0],[0]])
 		de = error - self.prev_error
 		if self.prev_time != None:
@@ -88,6 +88,7 @@ class Controller:
 
 def main():
 	rospy.init_node("drone_controller")
+	rospy.sleep(1)
 
 	controller = Controller()
 
