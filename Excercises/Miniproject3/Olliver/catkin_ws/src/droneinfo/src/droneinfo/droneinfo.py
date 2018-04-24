@@ -6,7 +6,8 @@ from geometry_msgs.msg import PoseStamped
 from rospy.impl import init
 
 from image_tools import getGSD
-from std_msgs.msg import Float32, Bool
+from std_msgs.msg import Float32
+from std_srvs.srv import SetBool, SetBoolRequest, SetBoolResponse
 import time
 import csv
 from quaternion import *
@@ -23,9 +24,9 @@ class droneinfo:
         self.pixel_width = 800
 
         # Service handler
-        self.s_start_log = rospy.Service("start_logging", Bool, self.startLogHandler, buff_size=10)
-        self.s_stop_log = rospy.Service("stop_logging", Bool, self.stopLogHandler, buff_size=10)
-        self.s_save_log = rospy.Service("save_logging", Bool, self.saveLogHandler, buff_size=10)
+        self.s_start_log = rospy.Service("/droneinfo/start_logging", SetBool, self.startLogHandler, buff_size=10)
+        self.s_stop_log = rospy.Service("/droneinfo/stop_logging", SetBool, self.stopLogHandler, buff_size=10)
+        self.s_save_log = rospy.Service("/droneinfo/save_log", SetBool, self.saveLogHandler, buff_size=10)
 
         # loggin parameters
         self.timeStart = rospy.get_time()
@@ -37,23 +38,21 @@ class droneinfo:
         # Subscribe to get height
         self.image_sub = rospy.Subscriber("/mavros/local_position/pose", PoseStamped, self.callback)
 
+    def startLogHandler(self, msg):
+            self.logging = True
+            self.timeStart = rospy.get_time()
+            self.loglist = []
+            return SetBoolResponse(success=True, message="Logging Started")
 
-    def startLogHandler(self):
-        self.logging = True
-        self.timeStart = rospy.get_time()
-        self.loglist = []
-        return "Logging Started"
-
-    def stopLogHandler(self):
+    def stopLogHandler(self, msg):
         self.logging = False
-        return "Logging Stopped"
+        return SetBoolResponse(success=True, message="Logging Stopped")
 
-    def saveLogHandler(self):
+    def saveLogHandler(self, msg):
         print("saving logfile")
 
         if len(self.loglist) == 0:
-            print("Log is empty, nothing to save")
-            return
+            return SetBoolResponse(success=False, message="Log is empty, nothing to save")
 
         with open(self.logfile, 'w') as csvfile:
             spamwriter = csv.writer(csvfile, delimiter=',')
@@ -63,9 +62,7 @@ class droneinfo:
         self.logging = False
         self.loglist = []
 
-        print("file saved")
-
-        return "Log saved to file"
+        return SetBoolResponse(success=True, message="Log Saved to file")
 
     def callback(self, data):
         height = data.pose.position.z
@@ -82,7 +79,12 @@ class droneinfo:
             self.loglist.append(data)
 
     def shutdownHandler(self):
-        self.saveLogHandler()
+        self.saveLogHandler(None)
+
+        # shutdown services
+        self.s_save_log.shutdown()
+        self.s_start_log.shutdown()
+        self.s_stop_log.shutdown()
         print("Shutting down")
 
 
