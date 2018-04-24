@@ -22,8 +22,8 @@ class Controller:
 		self.current_height = 2
 
 		self.P = 0.8
-		self.I = 0.0002
-		self.D = 0.0009
+		self.I = 0#.0002
+		self.D = 0#.0009
 
 		self.int_sum = np.array([[0],[0],[0],[0]])
 		self.prev_error = np.array([[0],[0],[0],[0]])

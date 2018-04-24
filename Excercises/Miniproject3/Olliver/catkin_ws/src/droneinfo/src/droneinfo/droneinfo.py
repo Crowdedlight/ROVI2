@@ -10,7 +10,7 @@ from std_msgs.msg import Float32
 class droneinfo:
 	def __init__(self):
 		# Publish to the MarkerLocator's original topic
-		self.gsd = rospy.Publisher("/droneinfo/gsd", Float32)
+		self.gsd = rospy.Publisher("/droneinfo/gsd", Float32, queue_size=10)
 		self.currGSD = 0
 
 		# Parameters depending on camera
