@@ -16,8 +16,8 @@ from markerfinder.msg import MarkerLocation
 class image_converter:
     def __init__(self):
         # Publish to the MarkerLocator's original topic
-        self.image_pub = rospy.Publisher("/markerlocator/image_raw", Image)
-        self.marker_pose_pub = rospy.Publisher("/markerlocator/markerpose", MarkerLocation)
+        self.image_pub = rospy.Publisher("/markerlocator/image_raw", Image, queue_size=10)
+        self.marker_pose_pub = rospy.Publisher("/markerlocator/markerpose", MarkerLocation, queue_size=10)
 
         # Subscribe from the Iris camera topic
         self.bridge = CvBridge()
