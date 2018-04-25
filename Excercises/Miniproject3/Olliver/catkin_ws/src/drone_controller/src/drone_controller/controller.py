@@ -28,13 +28,14 @@ class Controller:
 		self.busy = False
 		self.follow_camera = False
 		self.is_landing = False
+		self.landed = False
 
 		self.GSD = 2.0/800
 		self.setpoint = np.array([[0],[0],[2],[180]])
 		self.current_pose = np.array([[0],[0],[0],[0]])
 		self.marker_quality = 0
 
-		self.P = 0.5
+		self.P = 0.4
 		self.I = 0#.002
 		self.D = 0.001
 
@@ -47,6 +48,7 @@ class Controller:
 			self.busy = True
 			self.follow_camera = False
 			self.is_landing = False
+			self.landed = False
 			self.setpoint = np.array([[req.x],[req.y],[req.z],[req.yaw]])
 
 			return True, "New setpoint registered ([{}], [{}], [{}], [{}])".format(req.x,req.y,req.z,req.yaw)
@@ -65,6 +67,7 @@ class Controller:
 			self.busy = True
 			self.follow_camera = False
 			self.is_landing = False
+			self.landed = False
 			self.setpoint = np.array([[0],[0],[2],[180]])
 
 		else:
@@ -77,6 +80,7 @@ class Controller:
 			self.busy = True
 			self.follow_camera = True
 			self.is_landing = False
+			self.landed = False
 
 		else:
 			return False, "Can't execute command. Controller is busy."
@@ -87,6 +91,7 @@ class Controller:
 		if not self.busy:
 			if self.ready_to_land:
 				self.is_landing = True
+				self.landed = False
 				return True, "Attempting to land on marker"
 
 			return False, "Can't land. Not above marker yet"
@@ -98,6 +103,7 @@ class Controller:
 			self.busy = True
 			self.follow_camera = False
 			self.is_landing = False
+			self.landed = False
 			self.setpoint = np.array([[3], [4], [10], [180]])
 		else:
 			return False, "Can't execute command. Controller is busy."
@@ -109,6 +115,7 @@ class Controller:
 		self.busy = False
 		self.is_landing = False
 		self.follow_camera = False
+		self.landed = False
 
 		return True, "Cancelled current command"
 
@@ -183,13 +190,13 @@ class Controller:
 					# keep going
 					self.busy = True
 
-				if self.is_landing and self.current_pose[2] < 0.5:
+				if self.is_landing and self.current_pose[2] < 1:
 					# stop following marker and land where you are
 					self.setpoint = self.current_pose
-					# don't actually land
-					self.setpoint[2] = 0.4
+					self.setpoint[2] = 0
 					self.follow_camera = False
 					self.is_landing = False
+
 
 		cmd = self.pid_control(error)
 
@@ -198,7 +205,13 @@ class Controller:
 							z = cmd[2],#z_error,
 							yaw = cmd[3])#angle_error)
 
-		self.command_pub.publish(command)
+		if not self.landed:
+			self.command_pub.publish(command)
+
+		if self.current_pose[2] > 0.2:
+			self.landed = False
+		else:
+			self.landed = True
 
 def main():
 	rospy.init_node("drone_controller")
