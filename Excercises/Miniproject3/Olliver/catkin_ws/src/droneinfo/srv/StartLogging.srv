@@ -1,0 +1,4 @@
+string logname
+---
+bool success
+string message
