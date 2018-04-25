@@ -42,16 +42,17 @@ class droneinfo:
         self.image_sub = rospy.Subscriber("/mavros/local_position/pose", PoseStamped, self.callback)
 
     # need to use function to get latest changes set from services. Also updates self.logname
-    def getLogName(self):
+    def updateLogName(self):
         self.logfile = "src/droneinfo/logs/log" + "_" + self.userSetLogName + time.strftime(
             "%d_%m_%Y") + "_" + time.strftime("%H_%M_%S") + ".csv"
-        return self.logfile
 
     def startLogHandler(self, req):
         # if req != empty, change logfile name
         if req.logname != "":
             self.userSetLogName = req.logname + "_"
 
+        # update logname for correct time and custom tag
+        self.updateLogName()
         self.logging = True
         self.loglist = []
         return StartLoggingResponse(success=True, message="Logging Started")
@@ -65,14 +66,14 @@ class droneinfo:
             print("Log is empty, nothing to save")
             return TriggerResponse(success=False, message="Log is empty, nothing to save")
 
-        with open(self.getLogName(), 'w') as csvfile:
+        with open(self.logfile, 'w') as csvfile:
             spamwriter = csv.writer(csvfile, delimiter=',')
             for val in self.loglist:
                 spamwriter.writerow(val)
 
         # clear log in memory
         self.loglist = []
-        return TriggerResponse(success=True, message="Logging Stopped and saved to file: " + self.getLogName())
+        return TriggerResponse(success=True, message="Logging Stopped and saved to file: " + self.logfile)
 
     def callback(self, data):
         height = data.pose.position.z
