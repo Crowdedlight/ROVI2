@@ -60,7 +60,7 @@ class droneinfo:
 
         # always stop logging
         self.logging = False
-    
+
         if len(self.loglist) == 0:
             print("Log is empty, nothing to save")
             return TriggerResponse(success=False, message="Log is empty, nothing to save")
