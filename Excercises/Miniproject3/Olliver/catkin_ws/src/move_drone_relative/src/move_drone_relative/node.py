@@ -3,6 +3,7 @@ from move_drone_relative.msg import MoveDrone
 from geometry_msgs.msg import PoseStamped
 from mavros_msgs.msg import State
 from mavros_msgs.srv import SetMode, CommandBool
+from std_srvs.srv import Trigger
 from genpy.message import fill_message_args
 from math import cos, sin, pi, atan2, asin, degrees
 from quaternion import *

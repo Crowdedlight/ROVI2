@@ -54,11 +54,11 @@ catkin_python_setup()
 #)
 
 ## Generate services in the 'srv' folder
-#add_service_files(
-#   FILES
-#   Yaw.srv
-   #MoveDrone.srv
-# )
+add_service_files(
+   FILES
+   PID.srv
+   Setpoint.srv
+ )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
