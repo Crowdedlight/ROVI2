@@ -1,5 +1,5 @@
 <launch>
- <node name="droneinfo" pkg="droneinfo" type="main" />
+ <node name="droneinfo" pkg="droneinfo" type="main" cwd="node"/>
  <node name="move_drone_relative" pkg="move_drone_relative" type="main" />
  <node name="markerfinder" pkg="markerfinder" type="main" />
  <node name="drone_controller" pkg="drone_controller" type="main" />

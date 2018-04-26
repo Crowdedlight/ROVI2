@@ -2,6 +2,7 @@
 import roslib
 import sys
 import rospy
+import rospkg
 from geometry_msgs.msg import PoseStamped
 from rospy.impl import init
 
@@ -33,7 +34,9 @@ class droneinfo:
         self.timeStart = rospy.get_time()
         self.logging = False
         self.userSetLogName = ""
-        self.logfile = "src/droneinfo/logs/log" + "_" + self.userSetLogName + time.strftime(
+        rospack = rospkg.RosPack()
+        self.path = rospack.get_path('droneinfo')
+        self.logfile = self.path + "/logs/log" + "_" + self.userSetLogName + time.strftime(
             "%d_%m_%Y") + "_" + time.strftime("%H_%M_%S") + ".csv"
         # log in memory
         self.loglist = []
@@ -43,7 +46,7 @@ class droneinfo:
 
     # need to use function to get latest changes set from services. Also updates self.logname
     def updateLogName(self):
-        self.logfile = "src/droneinfo/logs/log" + "_" + self.userSetLogName + time.strftime(
+        self.logfile = self.path + "/logs/log" + "_" + self.userSetLogName + time.strftime(
             "%d_%m_%Y") + "_" + time.strftime("%H_%M_%S") + ".csv"
 
     def startLogHandler(self, req):
