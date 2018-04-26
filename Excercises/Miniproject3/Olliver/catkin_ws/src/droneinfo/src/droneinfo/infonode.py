@@ -7,7 +7,9 @@ from rospy.impl import init
 
 from image_tools import getGSD
 from std_msgs.msg import Float32
-from std_srvs.srv import SetBool, SetBoolRequest, SetBoolResponse
+from std_srvs.srv import Trigger, TriggerResponse
+from droneinfo.srv import StartLogging, StartLoggingResponse
+
 import time
 import csv
 from quaternion import *
@@ -24,45 +26,54 @@ class droneinfo:
         self.pixel_width = 800
 
         # Service handler
-        self.s_start_log = rospy.Service("/droneinfo/start_logging", SetBool, self.startLogHandler, buff_size=10)
-        self.s_stop_log = rospy.Service("/droneinfo/stop_logging", SetBool, self.stopLogHandler, buff_size=10)
-        self.s_save_log = rospy.Service("/droneinfo/save_log", SetBool, self.saveLogHandler, buff_size=10)
+        self.s_start_log = rospy.Service("/droneinfo/start_logging", StartLogging, self.startLogHandler, buff_size=10)
+        self.s_stop_log = rospy.Service("/droneinfo/stop_logging", Trigger, self.stopLogHandler, buff_size=10)
 
         # loggin parameters
         self.timeStart = rospy.get_time()
         self.logging = False
-        self.logfile = "src/droneinfo/logs/log" + "_" + time.strftime("%d_%m_%Y") + "_" + time.strftime("%H_%M_%S") + ".csv"
+        self.userSetLogName = ""
+        self.logfile = "src/droneinfo/logs/log" + "_" + self.userSetLogName + time.strftime(
+            "%d_%m_%Y") + "_" + time.strftime("%H_%M_%S") + ".csv"
         # log in memory
         self.loglist = []
 
         # Subscribe to get height
         self.image_sub = rospy.Subscriber("/mavros/local_position/pose", PoseStamped, self.callback)
 
-    def startLogHandler(self, msg):
-            self.logging = True
-            self.timeStart = rospy.get_time()
-            self.loglist = []
-            return SetBoolResponse(success=True, message="Logging Started")
+    # need to use function to get latest changes set from services. Also updates self.logname
+    def updateLogName(self):
+        self.logfile = "src/droneinfo/logs/log" + "_" + self.userSetLogName + time.strftime(
+            "%d_%m_%Y") + "_" + time.strftime("%H_%M_%S") + ".csv"
 
-    def stopLogHandler(self, msg):
+    def startLogHandler(self, req):
+        # if req != empty, change logfile name
+        if req.logname != "":
+            self.userSetLogName = req.logname + "_"
+
+        # update logname for correct time and custom tag
+        self.updateLogName()
+        self.logging = True
+        self.loglist = []
+        return StartLoggingResponse(success=True, message="Logging Started")
+
+    def stopLogHandler(self, req):
+
+        # always stop logging
         self.logging = False
-        return SetBoolResponse(success=True, message="Logging Stopped")
-
-    def saveLogHandler(self, msg):
-        print("saving logfile")
 
         if len(self.loglist) == 0:
-            return SetBoolResponse(success=False, message="Log is empty, nothing to save")
+            print("Log is empty, nothing to save")
+            return TriggerResponse(success=False, message="Log is empty, nothing to save")
 
         with open(self.logfile, 'w') as csvfile:
             spamwriter = csv.writer(csvfile, delimiter=',')
             for val in self.loglist:
                 spamwriter.writerow(val)
 
-        self.logging = False
+        # clear log in memory
         self.loglist = []
-
-        return SetBoolResponse(success=True, message="Log Saved to file")
+        return TriggerResponse(success=True, message="Logging Stopped and saved to file: " + self.logfile)
 
     def callback(self, data):
         height = data.pose.position.z
@@ -79,10 +90,9 @@ class droneinfo:
             self.loglist.append(data)
 
     def shutdownHandler(self):
-        self.saveLogHandler(None)
+        self.stopLogHandler(None)
 
         # shutdown services
-        self.s_save_log.shutdown()
         self.s_start_log.shutdown()
         self.s_stop_log.shutdown()
         print("Shutting down")

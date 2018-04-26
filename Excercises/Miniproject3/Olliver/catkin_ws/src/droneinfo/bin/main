@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-import droneinfo.droneinfo
+import droneinfo.infonode
 
 if __name__ == '__main__':
-    droneinfo.droneinfo.main()
+    droneinfo.infonode.main()
