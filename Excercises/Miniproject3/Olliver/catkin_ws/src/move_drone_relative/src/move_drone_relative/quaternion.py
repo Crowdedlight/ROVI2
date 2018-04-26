@@ -4,20 +4,21 @@ from genpy.message import fill_message_args
 import numpy as np
 
 def euler_angle_2_quaternion(R,P,Y):
-	cr = cos(R * 0.5)
-	sr = sin(R * 0.5)
-	cp = cos(P * 0.5)
-	sp = sin(P * 0.5)
+	# cr = cos(R * 0.5)
+	# sr = sin(R * 0.5)
+	# cp = cos(P * 0.5)
+	# sp = sin(P * 0.5)
 	cy = cos(Y * 0.5)
 	sy = sin(Y * 0.5)
 
-	w = cy * cr * cp + sy * sr * sp
-	x = cy * sr * cp - sy * cr * sp
-	y = cy * cr * sp + sy * sr * cp
-	z = sy * cr * cp - cy * sr * sp
+	# w = cy * cr * cp + sy * sr * sp
+	# x = cy * sr * cp - sy * cr * sp
+	# y = cy * cr * sp + sy * sr * cp
+	# z = sy * cr * cp - cy * sr * sp
+	# q = Quaternion(x=x, y=y, z=z, w=w)
 
-	q = Quaternion()
-	fill_message_args(q, [x,y,z,w])
+	# assuming roll and pitch are zero, this is fine
+	q = Quaternion(x=0, y=0, z=sy, w=cy)
 
 	return q
 
@@ -45,8 +46,8 @@ def quaternion_mult(q1,q2):
 	y = q1.w*q2.y + q1.y*q2.w + q1.z*q2.x - q1.x*q2.z
 	z = q1.w*q2.z + q1.z*q2.w + q1.x*q2.y - q1.y*q2.x
 
-	q = Quaternion()
-	fill_message_args(q, [x,y,z,w])
+	q = Quaternion(x=x, y=y, z=z, w=w)
+	# fill_message_args(q, [x,y,z,w])
 
 	return q
 

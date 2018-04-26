@@ -125,7 +125,6 @@ class Controller:
 		z = msg.pose.position.z
 		_, _, yaw = quaternion_to_euler_angle(msg.pose.orientation)
 		self.current_pose = np.array([[x],[y],[z],[yaw]])
-		#print(msg)
 
 	def cb_marker_update(self, msg):
 		x = msg.x
@@ -205,9 +204,11 @@ class Controller:
 							z = cmd[2],#z_error,
 							yaw = cmd[3])#angle_error)
 
+		# don't try to regulate the drone if it has landed
 		if not self.landed:
 			self.command_pub.publish(command)
 
+		#
 		if self.current_pose[2] > 0.2:
 			self.landed = False
 		else:

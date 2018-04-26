@@ -165,19 +165,12 @@ def transform2D(curr_state, target_state):
 	# 1 -> world * world -> 2 = 1 -> 2
 	t12 = np.matmul(inv(t1),t2)
 
-
-	#print(t1)
-	#print(t2)
-	#print(t12)
-
 	x = t12[0,2]
 	y = t12[1,2]
 
 	# inverse tangent of sin(theta) and cos(theta)
 	angle = atan2(t12[0,1],t12[0,0])
 	angle *= 180 / pi
-
-	#print("{} {} {}".format(x,y,angle))
 
 	return x,y,angle
 
