@@ -81,6 +81,8 @@ class Controller:
 			self.follow_camera = True
 			self.is_landing = False
 			self.landed = False
+			# the drone should stay at the current altitude, while following the marker
+			# self.setpoint[2] = self.current_pose[2]
 
 		else:
 			return False, "Can't execute command. Controller is busy."
@@ -92,6 +94,7 @@ class Controller:
 			if self.ready_to_land:
 				self.is_landing = True
 				self.landed = False
+				self.setpoint[2] = 2
 				return True, "Attempting to land on marker"
 
 			return False, "Can't land. Not above marker yet"
@@ -104,7 +107,7 @@ class Controller:
 			self.follow_camera = False
 			self.is_landing = False
 			self.landed = False
-			self.setpoint = np.array([[3], [4], [10], [180]])
+			self.setpoint = np.array([[3], [4], [10], [180]],dtype=float)
 		else:
 			return False, "Can't execute command. Controller is busy."
 
@@ -135,7 +138,8 @@ class Controller:
 		# the camera is not aligned with the drone
 		x_error = -y*self.GSD
 		y_error = -x*self.GSD
-		z_error = 0
+		z_error = self.setpoint[2] - self.current_pose[2]
+
 		angle_error = 0
 		if sqrt(x_error**2 + y_error**2) < 2:
 			angle_error = (-theta - 90)
@@ -166,12 +170,14 @@ class Controller:
 
 		error = np.array([[0],[0],[0],[0]])
 
+		rospy.loginfo(self.setpoint)
+
 		if self.follow_camera:# and self.marker_quality > 0.2:
 			error = self.marker_error
 
 			# adjust height slowly if landing
-			if self.is_landing:
-				error[2] -= 0.5
+			if self.is_landing and self.current_pose[2] < 2.5:
+				self.setpoint[2] = self.setpoint[2] - 0.005
 
 		else:
 			# calculate angle and translation from 2D homogenous transformations
@@ -209,10 +215,11 @@ class Controller:
 			self.command_pub.publish(command)
 
 		#
-		if self.current_pose[2] > 0.2:
+		if self.current_pose[2] > 0.15:
 			self.landed = False
 		else:
 			self.landed = True
+			self.is_landing = False
 
 def main():
 	rospy.init_node("drone_controller")
